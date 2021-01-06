@@ -17,7 +17,7 @@ jobs:
      - image: circleci/node:13.8.0
     working_directory: ~/
     steps:
-      - run: echo "world"
+      - run: echo "$UserName"
 workflows:
   welcome:
     jobs:
