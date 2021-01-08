@@ -17,7 +17,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run: cat ~/helloworld.txt
+      - run: cat ~/helloworld.out
 workflows:
   # Name the workflow "welcome"
   welcome:
