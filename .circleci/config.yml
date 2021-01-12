@@ -29,6 +29,11 @@ jobs:
       - attach_workspace:
           at: ~/
       - run: cat ~/helloworld.out
+      - run: return 1
+      - run: 
+          name: testing_failure
+          command: echo "Job Failed. Handle it!"
+          when: on_fail
 workflows:
   # Name the workflow "welcome"
   welcome:
