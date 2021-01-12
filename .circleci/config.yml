@@ -29,7 +29,7 @@ jobs:
       - attach_workspace:
           at: ~/
       - run: cat ~/helloworld.out
-      - run: return 1
+      - run: exit 0
       - run: 
           name: testing_failure
           command: echo "Job Failed. Handle it!"
