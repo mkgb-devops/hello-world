@@ -11,6 +11,17 @@ commands:
       - run: echo << parameters.to >>
 # Orchestrate or schedule a set of jobs
 jobs:
+  create_infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run: 
+          name: Ensure backend infrastructure exist
+          command: |
+            aws cloudformation deploy \
+              --template-file template.yml \
+              --stack-name my-stack
   save_hello_world_output:
     docker:
       - image: circleci/node:13.8.0
@@ -43,4 +54,7 @@ workflows:
       - print_output_file:
           requires:
             - save_hello_world_output
+  my_workflow:
+    jobs:
+      - create_infrastructure
     
