@@ -20,7 +20,7 @@ jobs:
           name: Ensure backend infrastructure exist
           command: |
             aws cloudformation deploy \
-              --region us-west-2a \
+              --region us-west-2 \
               --template-file template.yml \
               --stack-name my-stack
   save_hello_world_output:
