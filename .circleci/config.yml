@@ -11,54 +11,23 @@ commands:
       - run: echo << parameters.to >>
 # Orchestrate or schedule a set of jobs
 jobs:
-  configure_infrastructure:
-    docker:
-      - image: python:3.7-alpine3.11
-    steps:
-      - checkout
-      - add_ssh_keys:
-          fingerprints: ["09:8f:35:ed:57:0f:a6:26:cd:a4:bb:44:d9:95:a0:b7"] # You can get this ID in the section where you registered the SSH Key
-      - run:
-          name: Install dependencies
-          command: |
-            apk add --update ansible # install the dependencies needed for your playbook
-      - run:
-          name: Configure server
-          command: |
-            ansible-playbook -i inventory main-remote.yml
-  save_hello_world_output:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - run: echo "hello world" >~/helloworld.out 
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - helloworld.out
-      - print_pipeline_id:
-          to: $CIRCLE_WORKFLOW_ID
-  print_output_file:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - attach_workspace:
-          at: ~/
-      - run: cat ~/helloworld.out
-      - run: exit 0
-      - run: 
-          name: testing_failure
-          command: echo "Job Failed. Handle it!"
-          when: on_fail
+  smoke_test:
+      docker:
+        - image: alpine:latest
+      steps:
+        - run: apk add --update curl
+        - run:
+            name: smoke test.
+            command: |
+              URL="https://blog.udacity.com/"
+              if curl -s --head ${URL} # test if blog.udacity. com exists
+              then
+               return 0
+              else
+               return 1
+              fi
 workflows:
-  # Name the workflow "welcome"
-  welcome:
-    # Run the welcome/run job in its own container
-    jobs:
-      - save_hello_world_output
-      - print_output_file:
-          requires:
-            - save_hello_world_output
   my_workflow:
     jobs:
-      - configure_infrastructure
+      - smoke_test
     
