@@ -20,7 +20,7 @@ jobs:
               --region us-west-2 \
               --template-file template.yml \
               --stack-name my-stack
-      - run: return 1
+      - run: exit 1
       - run: 
           name: rollback_on_failure
           command: destroy_environment
