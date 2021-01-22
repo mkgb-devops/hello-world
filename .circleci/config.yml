@@ -7,6 +7,7 @@ commands:
           name: Destroy environment
           command: |
             aws cloudformation delete-stack --region us-west-2 --stack-name my-stack
+          when: on_fail
 jobs:
   create_infrastructure:
     docker:
@@ -21,10 +22,7 @@ jobs:
               --template-file template.yml \
               --stack-name my-stack
       - run: exit 1
-      - when: 
-          condition: on_fail
-          steps:
-            - destroy_environment
+      - destroy_environment
 workflows:
   my_workflow:
     jobs:
